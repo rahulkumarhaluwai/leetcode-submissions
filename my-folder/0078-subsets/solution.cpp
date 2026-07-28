@@ -10,7 +10,7 @@ public:
      ds.pop_back();
      func(ind + 1, nums, ds, ans);
     }
-    vector<vector<int>> subsets(vector<int>& nums) {
+    vector<vector<int>> subsets(vector<int> &nums) {
         vector<vector<int>> ans;
         vector<int> ds;
         func(0, nums, ds, ans);
