@@ -1,32 +1,21 @@
-class Node {
-public:
-    Node* links[2];
-
-    Node() {
-        links[0] = nullptr;
-        links[1] = nullptr;
-    }
-
-    bool containsKey(int bit) {
-        return links[bit] != nullptr;
-    }
-
-    Node* get(int bit) {
-        return links[bit];
-    }
-
-    void put(int bit, Node* node) {
-        links[bit] = node;
-    }
-};
-
 class Solution {
-public:
-    Node* root;
+    struct Node {
+        Node* links[2] = {};
 
-    Solution() {
-        root = new Node();
-    }
+        bool containsKey(int bit) {
+            return links[bit] != nullptr;
+        }
+
+        Node* get(int bit) {
+            return links[bit];
+        }
+
+        void put(int bit, Node* node) {
+            links[bit] = node;
+        }
+    };
+
+    Node* root = new Node();
 
     void insert(int num) {
         Node* node = root;
@@ -34,9 +23,8 @@ public:
         for (int i = 31; i >= 0; i--) {
             int bit = (num >> i) & 1;
 
-            if (!node->containsKey(bit)) {
+            if (!node->containsKey(bit))
                 node->put(bit, new Node());
-            }
 
             node = node->get(bit);
         }
@@ -44,32 +32,32 @@ public:
 
     int getMaxXOR(int num) {
         Node* node = root;
-        int maxXor = 0;
+        int result = 0;
 
         for (int i = 31; i >= 0; i--) {
             int bit = (num >> i) & 1;
+
             if (node->containsKey(1 - bit)) {
-                maxXor |= (1 << i);
+                result |= (1 << i);
                 node = node->get(1 - bit);
-            } 
-            else {
+            } else {
                 node = node->get(bit);
             }
         }
 
-        return maxXor;
+        return result;
     }
 
+public:
     int findMaximumXOR(vector<int>& nums) {
-        for (int num : nums) {
+        for (int num : nums)
             insert(num);
-        }
 
-        int maxResult = 0;
-        for (int num : nums) {
-            maxResult = max(maxResult, getMaxXOR(num));
-        }
+        int ans = 0;
 
-        return maxResult;
+        for (int num : nums)
+            ans = max(ans, getMaxXOR(num));
+
+        return ans;
     }
 };
